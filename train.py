@@ -183,8 +183,14 @@ def get_model(config, vocab_src_len, vocab_tgt_len):
 
 def train_model(config):
     # Define the device
-    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = xm.xla_device()
+    if config['device_name'] == 'tpu':
+        device = xm.xla_device()
+    elif config['device_name'] == 'mps':
+        # running on Apple Silicon
+        device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    else:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
     print("Using device:", device)
 
     # Make sure the weights folder exists
