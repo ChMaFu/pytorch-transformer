@@ -246,10 +246,6 @@ def train_model(config):
             optimizer.zero_grad(set_to_none=True)
 
             global_step += 1
-            
-            # For short report that only contains a few key metrics.
-            import torch_xla.debug.metrics as met
-            print(met.short_metrics_report())
 
         # Run validation at the end of every epoch
         run_validation(model, val_dataloader, tokenizer_src, tokenizer_tgt, config['seq_len'], device, lambda msg: batch_iterator.write(msg), global_step, writer)
